@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import useFormData from '../hooks/useFormData';
-import FormContainer from '../components/FormContainer';
+
+const FormContainer = React.lazy(() => import('../components/FormContainer'));
 
 const UserForm: React.FC = () => {
   const { formData, handleChange, resetForm } = useFormData();
@@ -14,7 +15,13 @@ const UserForm: React.FC = () => {
   return (
     <div className="form-page" data-testid="form-page">
       <h1>User Form</h1>
-      <FormContainer formData={formData} handleChange={handleChange} handleSubmit={handleSubmit} />
+      <Suspense fallback={<div>Loading Form...</div>}>
+        <FormContainer
+          formData={formData}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
+      </Suspense>
     </div>
   );
 };
