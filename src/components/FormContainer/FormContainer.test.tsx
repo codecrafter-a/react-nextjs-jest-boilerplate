@@ -10,6 +10,10 @@ describe('FormContainer Component', () => {
     name: '',
     email: '',
     password: '',
+    gender: '',
+    role: '',
+    testField: '',
+    acceptTerms: false,
   };
 
   beforeEach(() => {

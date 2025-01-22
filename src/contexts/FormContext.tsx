@@ -17,6 +17,10 @@ export const FormProvider: React.FC<FormProviderProps> = ({ children }) => {
     name: '',
     email: '',
     password: '',
+    gender: '',
+    role: '',
+    testField: '',
+    acceptTerms: false,
   });
   
   return (

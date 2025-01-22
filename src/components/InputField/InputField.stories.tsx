@@ -1,69 +1,76 @@
-import React, { useState } from 'react';
-import { Meta, StoryFn } from '@storybook/react'; // Use StoryFn for defining templates
-import InputField, { InputFieldProps } from './InputField';
-import { FormData } from '../../types/formTypes';
+import { Meta, StoryObj } from "@storybook/react";
+import InputField from "../../components/InputField/InputField";
 
-export default {
-  title: 'Components/InputField',
+const mockFormData = {
+  name: "John Doe",
+  email: "johndoe@example.com",
+  password: "password123",
+  acceptTerms: true,
+  role: "Admin",
+};
+
+const meta: Meta<typeof InputField> = {
+  title: "Components/InputField",
   component: InputField,
-} as Meta<InputFieldProps>;
-
-const Template: StoryFn<InputFieldProps> = (args: InputFieldProps) => {
-  const [value, setValue] = useState(args.value || '');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-    args.onChange(e);
-  };
-
-  return <InputField {...args} value={value} onChange={handleChange} />;
+  argTypes: {
+    onChange: { action: "changed" },
+  },
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  label: 'Default Input',
-  name: 'defaultInput' as keyof FormData,
-  type: 'text',
-  value: '',
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-    console.log('Default Input:', e.target.value),
+export default meta;
+
+export const Default: StoryObj<typeof InputField> = {
+  args: {
+    label: "Name",
+    name: "name",
+    type: "text",
+    value: mockFormData.name,
+  },
 };
 
-export const PasswordInput = Template.bind({});
-PasswordInput.args = {
-  label: 'Password',
-  name: 'password' as keyof FormData,
-  type: 'password',
-  value: '',
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-    console.log('Password Input:', e.target.value),
+export const Email: StoryObj<typeof InputField> = {
+  args: {
+    label: "Email",
+    name: "email",
+    type: "email",
+    value: mockFormData.email,
+  },
 };
 
-export const EmailInput = Template.bind({});
-EmailInput.args = {
-  label: 'Email',
-  name: 'email' as keyof FormData,
-  type: 'email',
-  value: '',
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-    console.log('Email Input:', e.target.value),
+export const Password: StoryObj<typeof InputField> = {
+  args: {
+    label: "Password",
+    name: "password",
+    type: "password",
+    value: mockFormData.password,
+  },
 };
 
-export const DisabledInput = Template.bind({});
-DisabledInput.args = {
-  label: 'Disabled Input',
-  name: 'disabledInput' as keyof FormData,
-  type: 'text',
-  value: 'Cannot change me',
-  onChange: () => {},
+export const Checkbox: StoryObj<typeof InputField> = {
+  args: {
+    label: "Accept Terms",
+    name: "acceptTerms",
+    type: "checkbox",
+    value: mockFormData.acceptTerms,
+  },
 };
 
-export const WithCustomStyles = Template.bind({});
-WithCustomStyles.args = {
-  label: 'Styled Input',
-  name: 'styledInput' as keyof FormData,
-  type: 'text',
-  value: '',
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-    console.log('Styled Input:', e.target.value),
+export const Select: StoryObj<typeof InputField> = {
+  args: {
+    label: "Role",
+    name: "role",
+    type: "select",
+    value: mockFormData.role,
+    options: ["Admin", "User", "Guest"],
+  },
+};
+
+export const Radio: StoryObj<typeof InputField> = {
+  args: {
+    label: "Role",
+    name: "role",
+    type: "radio",
+    value: mockFormData.role,
+    options: ["Admin", "User", "Guest"],
+  },
 };
