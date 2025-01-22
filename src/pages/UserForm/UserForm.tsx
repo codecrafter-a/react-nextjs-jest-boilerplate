@@ -4,7 +4,7 @@ import useFormData from '../../hooks/useFormData';
 const FormContainer = React.lazy(() => import('../../components/FormContainer/FormContainer'));
 
 const UserForm: React.FC = () => {
-  const { formData, handleChange, resetForm } = useFormData();
+  const { formData,  handleChange, resetForm } = useFormData();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

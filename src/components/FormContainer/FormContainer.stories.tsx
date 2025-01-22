@@ -13,6 +13,8 @@ const Template: StoryFn<typeof FormContainer> = (args) => {
     name: '',
     email: '',
     password: '',
+    testField: '',
+    acceptTerms: false
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,5 +49,7 @@ WithValues.args = {
     name: 'John Doe',
     email: 'john@example.com',
     password: 'password123',
+    testField: '',
+    acceptTerms: false
   },
 };

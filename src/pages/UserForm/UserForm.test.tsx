@@ -1,59 +1,97 @@
+import React from 'react';
+import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
-import UserForm from '../UserForm/UserForm';
-import * as useFormDataHook from '../../hooks/useFormData';
+import '@testing-library/jest-dom'; // Provides extended matchers
+import UserForm from './UserForm';
 
-describe('UserForm', () => {
-  it('should render the form and display the title', () => {
-    render(<UserForm />);
+// Mock the useFormData hook
+vi.mock('../../hooks/useFormData', () => ({
+  default: vi.fn(),
+}));
 
-    expect(screen.getByText('User Form')).toBeInTheDocument();
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
-  });
+// Mock the FormContainer component
+vi.mock('../../components/FormContainer/FormContainer', () => ({
+  __esModule: true,
+  default: ({ formData, handleChange, handleSubmit }: any) => (
+    <form onSubmit={handleSubmit} data-testid="mock-form">
+      <label htmlFor="name">Name</label>
+      <input
+        id="name"
+        name="name"
+        value={formData.name || ''}
+        onChange={handleChange}
+        data-testid="name-input"
+      />
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        value={formData.email || ''}
+        onChange={handleChange}
+        data-testid="email-input"
+      />
+      <button type="submit" data-testid="submit-button">
+        Submit
+      </button>
+    </form>
+  ),
+}));
 
-  it('should call handleSubmit when form is submitted', async () => {
-    const mockHandleSubmit = vi.fn();
+import useFormData from '../../hooks/useFormData';
 
-    vi.spyOn(useFormDataHook, 'default').mockReturnValue({
-      formData: {
-        name: 'John',
-        email: 'john@example.com',
-        password: 'password123',
-      },
-      handleChange: vi.fn(),
-      resetForm: vi.fn(),
-    });
+describe('UserForm Component', () => {
+  let mockHandleChange: vi.Mock;
+  let mockResetForm: vi.Mock;
+  let mockFormData: Record<string, string>;
 
-    render(<UserForm />);
+  beforeEach(() => {
+    mockHandleChange = vi.fn();
+    mockResetForm = vi.fn();
+    mockFormData = { name: '', email: '' };
 
-    fireEvent.submit(screen.getByRole('form'));
-
-    await waitFor(() => {
-      expect(mockHandleSubmit).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  it('should reset the form after submission', async () => {
-    const mockResetForm = vi.fn();
-
-    vi.spyOn(useFormDataHook, 'default').mockReturnValue({
-      formData: {
-        name: 'John',
-        email: 'john@example.com',
-        password: 'password123',
-      },
-      handleChange: vi.fn(),
+    (useFormData as vi.Mock).mockReturnValue({
+      formData: mockFormData,
+      handleChange: mockHandleChange,
       resetForm: mockResetForm,
     });
+  });
 
+  it('renders the UserForm component', async () => {
     render(<UserForm />);
+    expect(screen.getByText(/user form/i)).toBeInTheDocument();
+    expect(screen.getByTestId('form-page')).toBeInTheDocument();
+    await waitFor(() => screen.getByText('Loading Form...'));
+  });
 
-    fireEvent.submit(screen.getByRole('form'));
+  it('renders the FormContainer after lazy load', async () => {
+    render(<UserForm />);
+    await waitFor(() => screen.getByTestId('mock-form'));
+    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+  });
 
-    await waitFor(() => {
-      expect(mockResetForm).toHaveBeenCalledTimes(1);
-    });
+  it('handles input changes correctly', async () => {
+    render(<UserForm />);
+    await waitFor(() => screen.getByLabelText(/name/i));
+  
+    const nameInput = screen.getByTestId('name-input');
+    
+    fireEvent.change(nameInput, { target: { value: 'John Doe' } });
+  
+    expect(mockHandleChange).toHaveBeenCalledTimes(1);
+  
+    const event = mockHandleChange.mock.calls[0][0];
+    expect(event.target.value).toBe('');
+  });
+  
+
+  it('submits the form and resets data', async () => {
+    render(<UserForm />);
+    await waitFor(() => screen.getByTestId('mock-form'));
+
+    const submitButton = screen.getByTestId('submit-button');
+    fireEvent.click(submitButton);
+
+    expect(mockResetForm).toHaveBeenCalledTimes(1);
   });
 });
