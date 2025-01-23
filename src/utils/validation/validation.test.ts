@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateEmail, validateRequired } from './validation';
+import { validateEmail, validateRequired } from '../validation/validation';
 
 describe('Validation Functions', () => {
   
