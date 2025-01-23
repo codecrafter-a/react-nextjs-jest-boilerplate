@@ -39,7 +39,7 @@ body {
     border-radius: 4px;
   }
   
-  button {
+  /* button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -51,5 +51,5 @@ body {
   
   button:hover {
     background-color: #0056b3;
-  }
+  } */
   

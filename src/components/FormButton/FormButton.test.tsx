@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import FormButton from './FormButton';
+import FormButton from '../FormButton/FormButton';
 import { expect, vi } from 'vitest';
 
 describe('FormButton Component', () => {
