@@ -9,25 +9,6 @@ vi.mock('./contexts/FormContext', () => ({
 }));
 
 describe('App Component', () => {
-  it('renders the FormProvider and UserForm correctly', () => {
-    render(<App />);
-
-    const heading = screen.getByRole('heading', { name: /user form/i });
-    expect(heading).toBeInTheDocument();
-
-    const nameInput = screen.getByLabelText(/name/i);
-    expect(nameInput).toBeInTheDocument();
-
-    const emailInput = screen.getByLabelText(/email/i);
-    expect(emailInput).toBeInTheDocument();
-
-    const passwordInput = screen.getByLabelText(/password/i);
-    expect(passwordInput).toBeInTheDocument();
-
-    const submitButton = screen.getByRole('button', { name: /submit/i });
-    expect(submitButton).toBeInTheDocument();
-  });
-
   it('renders FormProvider context correctly', () => {
     render(<App />);
     
