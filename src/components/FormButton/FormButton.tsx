@@ -4,7 +4,7 @@ interface FormButtonProps {
   label: string;
   type?: 'submit' | 'button' | 'reset';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  ariaLabel?: string;  // Optional aria-label for better accessibility
+  ariaLabel?: string;
 }
 
 const FormButton: React.FC<FormButtonProps> = ({
@@ -16,7 +16,7 @@ const FormButton: React.FC<FormButtonProps> = ({
   return (
     <button
       type={type}
-      className="form-button hover:bg-accent"
+      className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
       onClick={onClick}
       aria-label={ariaLabel || label}
     >
